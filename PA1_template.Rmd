@@ -1,25 +1,50 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
 output: 
-  html_document:
-    keep_md: true
+html_document:
+keep_md: true"
+author: "lsaa"
 ---
 
+This is my first peer assessment on Reproducible Research about personal movement using activity monitoring devices such as a Fitbit, Nike Fuelband, or Jawbone Up. 
 
 ## Loading and preprocessing the data
+```{r, echo=TRUE}
+setwd("C:/Users/Danielle Taneyo/Desktop/Rwork/DataAN")
+df <- read.csv("activity.csv")
+df$date <- as.Date(df$date)
+library(lattice)
+library(dplyr)
+library(plyr)
 
-
+```
 
 ## What is mean total number of steps taken per day?
-
-
+```{r, echo=TRUE}
+total_step <- tapply(df$steps, df$date, sum, na.rm = TRUE)
+mean(total_step)
+median(total_step)
+histogram(total_step, main = "Total number of steps taken each day", xlab = "")
+```
 
 ## What is the average daily activity pattern?
-
-
+```{r, echo=TRUE}
+intervalData <- ddply(df, .(interval), summarize, mean = mean(steps, na.rm =TRUE))
+xyplot(intervalData$meanInter ~ intervalData$interval, type = "l")
+intervalData[which.max(intervalData$meanInter),]
+```
 
 ## Imputing missing values
-
-
+```{r, echo=TRUE}
+sum(is.na(df))
+dff <- filter(df, !is.na(steps))
+total_dff <- tapply(dff$steps, dff$date, sum)
+histogram(total_dff, main = "Total number of steps taken each day", xlab = "")
+mean(total_dff)
+median(total_dff)
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r, echo=TRUE}
+dff_week <- mutate(dff, wD = weekdays(date))
+```
