@@ -29,7 +29,7 @@ histogram(total_step, main = "Total number of steps taken each day", xlab = "")
 
 ## What is the average daily activity pattern?
 ```{r, echo=TRUE}
-intervalData <- ddply(df, .(interval), summarize, mean = mean(steps, na.rm =TRUE))
+intervalData <- ddply(df, .(interval), summarize, meanInter = mean(steps, na.rm =TRUE))
 xyplot(intervalData$meanInter ~ intervalData$interval, type = "l")
 intervalData[which.max(intervalData$meanInter),]
 ```
